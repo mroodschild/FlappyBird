@@ -65,16 +65,13 @@ public class MainApp extends Application {
                 bird_Net.start();
                 break;
             case "train":
-                //configuración de la red neuronal
+               //configuración de la red neuronal
                 Feedforward net = new Feedforward();
-//                net.addLayer(new Dense(7560, 10, TransferFunction.TANSIG));//70*108 = 7560
-//                net.addLayer(new Dense(10, 10, TransferFunction.TANSIG));//70*108 = 7560
-//                net.addLayer(new RLayer(10, 1, TransferFunction.LOGSIG, 10));
-                //net.addLayer(new Dense(10, 1, TransferFunction.LOGSIG));
                 
                 net.addLayer(new Dense(1305, 10, TransferFunction.TANSIG));//29*45 = 1305
                 net.addLayer(new Dense(10, 10, TransferFunction.TANSIG));
-                net.addLayer(new Dense(10, 1, TransferFunction.LOGSIG));
+                //net.addLayer(new RLayer(10, 10, TransferFunction.LOGSIG, 2));
+                net.addLayer(new RLayer(10, 1, TransferFunction.LOGSIG, 10));
 
                 Fitness fitness1 = new FitnessFlappyBird();
                 ((FitnessFlappyBird) fitness1).setNet(net);
@@ -98,7 +95,7 @@ public class MainApp extends Application {
                 //aqui le indicamos al genetico donde guardar los resultados
                 //REVISAR que existe la carpeta!
                 //String folder = "D:\\resultados\\45x29\\03";
-                String folder = "src/main/resources/results/05";
+                String folder = "src/main/resources/results/11";
 
                 AG_FlappyMNUMPNN ag_flappy = new AG_FlappyMNUMPNN(epocas, individuos,
                         sizeDNA, offspring, elite, mutacion_porcentaje, torneo_tamano,

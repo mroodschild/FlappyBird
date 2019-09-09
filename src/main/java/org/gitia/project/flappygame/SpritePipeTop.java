@@ -37,9 +37,19 @@ public class SpritePipeTop extends SpritePipe {
         super.setBoundLimits(0 - super.getWidth() + 15, backgroundWidth, 0, backgroundHeight);
     }
 
+    /**
+     * 
+     * @param backgroundWidth   //ancho de la imagen de background para definir el espacio de movimiento
+     * @param backgroundHeight  //largo de la imagen de background para definir el espacio de movimiento
+     * @param image //imagen del caño
+     * @param posX  //posición X de inicio
+     * @param posY  //posicion Y de inicio
+     */
     public SpritePipeTop(double backgroundWidth, double backgroundHeight, Image image, double posX, double posY) {
         super.setImage(image);
+        //posiciones iniciales del caño
         super.setPosition(posX, posY);
+        //limites para movimiento de los caños
         super.setBoundLimits(0 - super.getWidth() + 15, backgroundWidth, 0, backgroundHeight);
     }
 

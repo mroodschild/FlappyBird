@@ -112,7 +112,7 @@ public class FlappyBirdGame extends AnimationTimer {
 
     @Override
     public void handle(long currentNanoTime) {
-            double elapsedTime = (currentNanoTime - lastNanoTime.value) / velocidad;
+        double elapsedTime = (currentNanoTime - lastNanoTime.value) / velocidad;
         if (elapsedTime > fpsTime) {
             if (isStart) {
                 lastNanoTime.value = currentNanoTime;
@@ -127,21 +127,6 @@ public class FlappyBirdGame extends AnimationTimer {
                 refresh(currentNanoTime);
             }
         }
-//        double elapsedTime = (currentNanoTime - lastNanoTime.value) / velocidad;
-//        if (elapsedTime > fpsTime) {
-//            if (isStart) {
-//                lastNanoTime.value = currentNanoTime;
-//                action();
-//                updateObjects(elapsedTime);
-//                detectarColision(elapsedTime);
-//                crearTuberias();
-//                renderizarObjetos();
-//                evaluarJuego();
-////                System.out.println("ElapsedTime: " + elapsedTime);
-//            } else {
-//                refresh(currentNanoTime);
-//            }
-//        }
     }
 
     /**
@@ -155,14 +140,34 @@ public class FlappyBirdGame extends AnimationTimer {
         bird.update(elapsedTime);
         pipeList.removeIf(p -> p.getPositionX() < p.getMinPosX() + 1);
         int pipeSize = pipeList.size();
+        //punto anterior de la cañería
         if (pipeSize > 0) {
             recorrido = pipeList.get(0).getPositionX();
         }
-        for (int i = 0; i < pipeSize; i++) {
-            Sprite pipe = pipeList.get(i);
-            pipe.setVelocity(-200, 0);
-            pipe.update(elapsedTime);
+        if (pipeSize > 0) {
+            boolean primero = true;
+            double posActual = pipeList.get(0).getPositionX();
+            double posNueva = 0;
+            for (int i = 0; i < pipeSize; i++) {
+                if (primero) { //solo al primero le calculamos el movimiento
+                    Sprite pipe = pipeList.get(i);
+                    pipe.setVelocity(-200, 0);
+                    pipe.update(elapsedTime);
+                    posNueva = pipe.getPositionX();
+                    primero = false;
+                } else {//el resto se mueve en referencia al primero
+                    Sprite pipe = pipeList.get(i);
+                    if (posActual == pipe.getPositionX()) {//todos los que estan en X se mueven a Y
+                        pipe.setPositionX(posNueva);
+                    } else {
+                        posActual = pipe.getPositionX();//acutalizamos el X de referencia
+                        posNueva = posNueva + distanciaTubos;
+                        pipe.setPositionX(posNueva);
+                    }
+                }
+            }
         }
+        //punto poseterior de la cañería y vemos el recorrido
         if (pipeSize > 0) {
             recorrido -= pipeList.get(0).getPositionX();
         }
@@ -191,7 +196,7 @@ public class FlappyBirdGame extends AnimationTimer {
         //theStage.close();
         finalizado = true;
     }
-    
+
     /**
      * se determina el movimiento del pajarito
      */
@@ -211,7 +216,7 @@ public class FlappyBirdGame extends AnimationTimer {
         score.add(recorrido * 0.001);//siempre damos puntos
         for (int i = 0; i < pipeList.size(); i++) {
             SpritePipe pipe = (SpritePipe) pipeList.get(i);
-            if (bird.getPositionX() + bird.getWidth() / 2 > pipe.positionX+pipe.getWidth()) {
+            if (bird.getPositionX() + bird.getWidth() / 2 > pipe.positionX + pipe.getWidth()) {
                 if (contar && !pipe.getCount()) {
                     score.add(1);//si paso un tubo damos premio
                     contar = false;
@@ -263,9 +268,10 @@ public class FlappyBirdGame extends AnimationTimer {
             //int pos = r.nextInt(6) + 1;
             int pos = 3;
             int hueco = 4;
-
+            //Agregamos todos los caños correspondientes a una columna
             for (int i = 0; i < 11; i++) {
                 if (i + 1 == pos) {
+                    // +70 para que inicie sobresaliendo del juego
                     Sprite pipetop = new SpritePipeTop(background.getWidth() + 70, background.getHeight(), iPipeTop, X, 45 * i);
                     pipeList.add(pipetop);
                 } else if (i - hueco == pos) {
@@ -276,19 +282,6 @@ public class FlappyBirdGame extends AnimationTimer {
                     pipeList.add(pipeBase);
                 }
             }
-            
-////     public SpritePipeTop(double backgroundWidth, double backgroundHeight, Image image, double posX, double posY) {
-////        super.setImage(image);
-////        super.setPosition(posX, posY);
-////        super.setBoundLimits(0 - super.getWidth() + 15, backgroundWidth, 0, backgroundHeight);
-////     }
-//            
-//            SpritePipe pipeTop = new SpritePipe();
-//            pipeTop.setWidth(88);
-//            pipeTop.setHeight(45 * pos);
-//            pipeTop.setPosition(X, 0);
-//            
-//            pipeList.add(pipeTop);
 
         }
     }
