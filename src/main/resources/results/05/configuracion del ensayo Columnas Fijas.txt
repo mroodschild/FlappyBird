@@ -1,0 +1,45 @@
+//configuración de la red neuronal
+                Feedforward net = new Feedforward();
+//                net.addLayer(new Dense(7560, 10, TransferFunction.TANSIG));//70*108 = 7560
+//                net.addLayer(new Dense(10, 10, TransferFunction.TANSIG));//70*108 = 7560
+//                net.addLayer(new RLayer(10, 1, TransferFunction.LOGSIG, 10));
+                //net.addLayer(new Dense(10, 1, TransferFunction.LOGSIG));
+                
+                net.addLayer(new Dense(1305, 10, TransferFunction.TANSIG));//29*45 = 1305
+                net.addLayer(new Dense(10, 10, TransferFunction.TANSIG));
+                net.addLayer(new Dense(10, 1, TransferFunction.LOGSIG));
+
+                Fitness fitness1 = new FitnessFlappyBird();
+                ((FitnessFlappyBird) fitness1).setNet(net);
+
+                int sizeDNA = net.getParameters().getNumElements();
+
+                // configuración del genético
+                int epocas = 300;
+                int individuos = 20;
+                double offspring = 0.8;//16
+                double elite = 0.1;//2
+                double mutacion_porcentaje = 0.05;//1
+                double porcentaje_PesosMutar = 0.10;
+                int capa_mutar = 1;
+                int torneo_tamano = (int) (individuos * 0.04);//4%
+                if (torneo_tamano <= 2) {
+                    torneo_tamano = 3;
+                }
+
+                boolean mutar_bias = true;
+                //aqui le indicamos al genetico donde guardar los resultados
+                //REVISAR que existe la carpeta!
+                //String folder = "D:\\resultados\\45x29\\03";
+                String folder = "src/main/resources/results/05";
+
+                AG_FlappyMNUMPNN ag_flappy = new AG_FlappyMNUMPNN(epocas, individuos,
+                        sizeDNA, offspring, elite, mutacion_porcentaje, torneo_tamano,
+                        net, porcentaje_PesosMutar, capa_mutar, mutar_bias);
+
+                //1000000000.0
+                //FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 5, 300000000.0, folder);
+                FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 5, 400000000.0, folder);
+
+                flappyBird.start();
+                break;
