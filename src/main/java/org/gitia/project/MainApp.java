@@ -52,14 +52,14 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage theStage) throws Exception {
-        String quienJuega = "net";//human, net, train, reduced
+        String quienJuega = "train";//human, net, train, reduced
         switch (quienJuega) {
             case "human":
                 FlappyBirdGame fbh = new FlappyBirdGame();
                 fbh.start();
                 break;
             case "net":
-                Feedforward bird = Open.getNet("net_gen_19_it_11_score_24.946.xml", "src/main/resources/results/11");
+                Feedforward bird = Open.getNet("net_gen_29_it_4_score_2.874.xml", "src/main/resources/results/13");
                 System.out.println("" + bird.toString());
                 
                 int L = bird.getLayers().size()-1;
@@ -105,7 +105,7 @@ public class MainApp extends Application {
                 //aqui le indicamos al genetico donde guardar los resultados
                 //REVISAR que existe la carpeta!
                 //String folder = "D:\\resultados\\45x29\\03";
-                String folder = "src/main/resources/results/13";
+                String folder = "src/main/resources/results/14";
 
                 AG_FlappyMNUMPNN ag_flappy = new AG_FlappyMNUMPNN(epocas, individuos,
                         sizeDNA, offspring, elite, mutacion_porcentaje, torneo_tamano,
@@ -113,7 +113,7 @@ public class MainApp extends Application {
 
                 //1000000000.0
                 //FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 5, 300000000.0, folder);
-                FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 10, 400000000.0, folder);
+                FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 3, 400000000.0, folder);
 
                 flappyBird.start();
                 break;
