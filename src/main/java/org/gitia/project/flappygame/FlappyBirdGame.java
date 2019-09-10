@@ -55,6 +55,9 @@ public class FlappyBirdGame extends AnimationTimer {
     GraphicsContext gc;
     Sprite bird;
 
+    int caminos = 3;
+    int countCaminos = 0;
+
     ArrayList<Sprite> pipeList = new ArrayList<>();
 
     LongValue lastNanoTime = new LongValue(System.nanoTime());
@@ -247,6 +250,7 @@ public class FlappyBirdGame extends AnimationTimer {
         bird = new SpriteBird(background.getWidth(), background.getHeight(), iBird);
         isStart = true;
         hit = false;
+        int countCaminos = 0;
         //r = new Random(1);
         this.start();
     }
@@ -265,8 +269,23 @@ public class FlappyBirdGame extends AnimationTimer {
         if (X <= background.getWidth()) {
             //time.setTime(time.getTime() - distancia);
 
-            //int pos = r.nextInt(6) + 1;
-            int pos = 3;
+            int pos=0;// = r.nextInt(6) + 1;
+            //int pos = 3;
+            int sel= countCaminos%caminos;
+            //System.out.println("sel: "+sel);
+            switch (sel) {
+                case 0:
+                    pos = 4;
+                    break;
+                case 1:
+                    pos = 5;
+                    break;
+                case 2:
+                    pos = 3;
+                    break;
+            }
+            countCaminos++;
+                    
             int hueco = 4;
             //Agregamos todos los caños correspondientes a una columna
             for (int i = 0; i < 11; i++) {

@@ -52,15 +52,25 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage theStage) throws Exception {
-        String quienJuega = "train";//human, net, train, reduced
+        String quienJuega = "net";//human, net, train, reduced
         switch (quienJuega) {
             case "human":
                 FlappyBirdGame fbh = new FlappyBirdGame();
                 fbh.start();
                 break;
             case "net":
-                Feedforward bird = Open.getNet("net_gen_102_it_138_score_3.602.xml", "D:\\resultados\\45x29\\01");
+                Feedforward bird = Open.getNet("net_gen_19_it_11_score_24.946.xml", "src/main/resources/results/11");
                 System.out.println("" + bird.toString());
+                
+                int L = bird.getLayers().size()-1;
+                
+                RLayer rLayer = new RLayer(10, 1, TransferFunction.LOGSIG, 10);
+                
+                rLayer.setW(bird.getLayers().get(L).getW());
+                rLayer.setB(bird.getLayers().get(L).getB());
+                
+                bird.getLayers().set(L, rLayer);
+                
                 FlappyBirdTestNet bird_Net = new FlappyBirdTestNet(bird, 400000000.0);
                 bird_Net.start();
                 break;
@@ -95,7 +105,7 @@ public class MainApp extends Application {
                 //aqui le indicamos al genetico donde guardar los resultados
                 //REVISAR que existe la carpeta!
                 //String folder = "D:\\resultados\\45x29\\03";
-                String folder = "src/main/resources/results/11";
+                String folder = "src/main/resources/results/13";
 
                 AG_FlappyMNUMPNN ag_flappy = new AG_FlappyMNUMPNN(epocas, individuos,
                         sizeDNA, offspring, elite, mutacion_porcentaje, torneo_tamano,
@@ -103,7 +113,7 @@ public class MainApp extends Application {
 
                 //1000000000.0
                 //FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 5, 300000000.0, folder);
-                FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 5, 400000000.0, folder);
+                FlappyBirdTrain flappyBird = new FlappyBirdTrain(net, ag_flappy, 10, 400000000.0, folder);
 
                 flappyBird.start();
                 break;
